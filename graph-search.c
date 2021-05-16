@@ -5,11 +5,17 @@
 #define MAX_Vertex 10
 
 /*Graph는 Adjacent List로 구현한다.*/
-typedef struct Vertex {
-	int visitflag; //간선이 검사되었는지 보는 flag
+/*Edge 구조체는 Edge를 나타낸다 */
+typedef struct Edge {
+    struct Edge* link;
+} Edge;
 
-    struct Vertex* link;
+/*Vertex 구조체는 Vertex를 인접 리스트로 나타내며 data로 Vertex에 들어있는 data, link로 다음 Edge를 가리킨다.*/
+typedef struct Vertex {
+	int data;
+    struct Edge* link;
 } Vertex;
+
 
 /* 현재 Vertex가 얼마나 있는지는 currentvertex로 관리한다. */
 int currentvertex=0;
@@ -34,6 +40,9 @@ void enQueue(Vertex* aVertex);
 
 void InitializeGraph(Vertex** v ); //Graph 초기화 함수
 void FreeGraph(Vertex* v); //Vertex free 함수
+
+void Insertvertex(Vertex* v,int key); //key값의 vertex를 삽입한다.
+void Insertedge();
 
 
 int main()
@@ -100,9 +109,12 @@ void InitializeGraph(Vertex** v )
     /*MAX_Vertex만큼의 SIZE를 할당해준다.*/
     *v = (Vertex*)malloc(sizeof(Vertex)*MAX_Vertex);
     
-    /*adjList의 link들도 초기화 해준다. */
+    /*adjList의 link와 data도 초기화 해준다. */
     for(int i = 0;i<MAX_Vertex;i++)
-        (*v)->link = NULL;
+        {
+			(*v)->link = NULL;
+			(*v)->data = 0;
+		}
     currentvertex = 0;
     
     /*큐와 스택을 위한 초기화*/
@@ -149,4 +161,12 @@ void FreeGraph(Vertex* v)
 	 //adjList만 free 해 주면 된다
 	 for(int i=0;i<MAX_Vertex;i++)
 	  free(&v[i]);
+}
+
+void Insertvertex(Vertex* v,int key)
+{
+	/*currentvertex 번호에 key 값을 가진 vertex 삽입. */
+	v[currentvertex].data = key;
+	v[currentvertex].link = NULL; //삽입된 vertex에는 edge가 아직 없다.
+	currentvertex++;
 }
