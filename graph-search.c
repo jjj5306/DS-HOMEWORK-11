@@ -7,8 +7,9 @@
 /*Graph는 Adjacent List로 구현한다.*/
 /*Edge 구조체는 Edge를 나타낸다 */
 typedef struct Edge {
-	struct Edge* link;
-	int vertex;
+	struct Edge* link; //다음 Edge
+	int vertex; //가리키는 vetex 번호
+	int visitflag; //탐색에서 사용할 flag
 } Edge;
 
 /*Vertex 구조체는 Vertex를 인접 리스트로 나타내며 data로 Vertex에 들어있는 data, link로 다음 Edge를 가리킨다.*/
@@ -30,6 +31,8 @@ int currentvertex = 0;
 #define MAX_STACK_SIZE		20
 Vertex* stack[MAX_STACK_SIZE];
 int top = -1;
+int currentstack=0; 
+
 
 Vertex* pop();
 void push(Vertex* aVertex);
@@ -50,6 +53,9 @@ void FreeGraph(Vertexhead* v); //Vertex free 함수
 void Insertvertex(Vertexhead* v); //vertex를 삽입한다.
 void Insertedge(Vertexhead *v);
 
+void DFS_iterative(Vertexhead *v);
+/*규칙에 맞게 push 하고 push하면서 차례로 dfs 리스트에 넣기 위해서 총 몇개를 push했는지 기록하는 currentstack 사용 자세한 규칙은 함수 내부에 서술*/
+int find_least_index(Vertexhead *v); //vertex 중 Edge가 존재하면서 vertexnumber가 가장 작은 vertex의 number 리턴
 
 int main()
 {
@@ -275,4 +281,63 @@ void Insertedge(Vertexhead* v)
 	check->link->link = NULL;
 	//Edge 생성 완료
 	printf("vertex %d번에서 vertex %d번 까지 Edge를 생성했습니다.\n", start, destination);
+}
+
+void DFS_iterative(Vertexhead *v)
+{
+	/* 가장 vertex number가 작은 vertex를 찾아서 그 vertex부터 push하고 
+	인접한 vertex들 중에서 visit하지 않았고 vertex number가 가장 작은 vertex를 push한다.
+	인접한 vertex가 없으면 스택에서 pop하고 top에 있는 vertex에 대해서 다시 인접한 vertex를 조사하는 식으로
+	구성하였다. push할 때 배열의 currentstack index에 data와 vertex number을 저장해서 나중에 출력할 때 사용한다.*/
+
+	/*
+	vertex number가 가장 작고 Edge가 존재하는 vertex를 push
+	while(스택이 빌 때 까지 반복한다. ) 
+	{
+		while(top의 vertex의 non-visit edge가 없을때까지)
+		{
+			인접한 vertex중 가장 번호가 작은 vertex를 push
+		}
+		pop
+	}
+	*/
+//문제점 : 독립된 vertex들의 set은 search 할 수 가 없다 원래 그런가?? 시작점을 입력받을까?? 시작점을 가장 Edge가 많은 Vertex로 잡을까????
+
+	int least_index = find_least_index(v);
+	int DFS_Vertexnumber[MAX_Vertex]; //DFS탐색 후 차례로 탐색 결과의 Vertexnumber가 저장 될 배열
+	int DFS_Vertexdata[MAX_Vertex]; //DFS탐색 후 차례로 탐색 결과의 Vertex data가 저장 될 배열
+	if(least_index == -1)
+	{
+		printf("Egde가 존재하지 않는 그래프입니다.\n");
+		return;
+	}
+
+}
+
+int find_least_index(Vertexhead *v)
+{
+	for(int i = 0; i < MAX_Vertex ; i++)
+		if(v[i].link != NULL)
+			return i;
+	return -1; //못 찾았으면 -1 리턴
+}
+
+Vertex* pop()
+{
+	Vertex* vertex;
+	if (top == -1) //스택이 비어있다면 NULL 리턴
+		return NULL;
+	else
+	{
+		vertex = stack[top];
+		top--;
+		return vertex;
+	}
+
+}
+
+void push(Vertex* aVertex)
+{
+	stack[++top] = aVertex;
+	currentstack++;
 }
