@@ -211,7 +211,7 @@ void Insertvertex(Vertexhead* v)
 		return;
 	}
 	/*vertexhead의 vertexnumber의 link는 vertex를 가리킬 것이다 */
-	v[vertexnumber].link = (Vertexhead*)malloc(sizeof(Vertex));
+	v[vertexnumber].link = (Vertex*)malloc(sizeof(Vertex));
 	v[vertexnumber].link->visitflag = 0;
 	v[vertexnumber].link->link = NULL; //Edge는 NULL
 	printf("Data : ");
@@ -227,6 +227,13 @@ void Insertedge(Vertexhead* v)
 	Vertex* check2 = NULL; //check2는 vertex에 Edge가 없을 떄 사용
 	printf("Edge를 연결 할 출발 vertex number을 입력하세요.\n");
 	scanf("%d", &start);
+
+	/*0~9인지 확인*/
+	if (!(start >= 0 && start < 10))
+	{
+		printf("유효하지않은 vertex number입니다.\n");
+	}
+
 	/*생성된 vertex인지 확인*/
 	if (v[start].link == NULL)
 	{
@@ -236,6 +243,13 @@ void Insertedge(Vertexhead* v)
 
 	printf("도착할 vertex number을 입력하세요.\n");
 	scanf("%d", &destination);
+
+	/*0~9인지 확인*/
+	if (!(destination >= 0 && destination < 10))
+	{
+		printf("유효하지않은 vertex number입니다.\n");
+	}
+
 	/*생성된 vertex인지 확인*/
 	if (v[destination].link == NULL)
 	{
@@ -306,7 +320,7 @@ void Insertedge(Vertexhead* v)
 	{
 		check2 = v[destination].link;
 		check2->link = (Edge*)malloc(sizeof(Edge));
-		check2->link->vertex = destination;
+		check2->link->vertex = start;
 		check2->link->link = NULL;
 	}
 	else
@@ -314,7 +328,7 @@ void Insertedge(Vertexhead* v)
 	 while (check->link != NULL)
 		check = check->link;
 	 check->link = (Edge*)malloc(sizeof(Edge));
-	 check->link->vertex = destination;
+	 check->link->vertex = start;
 	 check->link->link = NULL;
 	}	
 	printf("vertex %d번에서 vertex %d번 까지 Edge를 생성했습니다.\n", start, destination);
@@ -369,6 +383,7 @@ void DFS_iterative(Vertexhead* v)
 		pop();
 	}
 
+	
 	printf("Vertex number : ");
 	for (int i = 0; i < currentstack; i++)
 		printf("%d ", DFS_Vertexnumber[i]);
