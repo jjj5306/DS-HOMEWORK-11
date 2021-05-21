@@ -57,6 +57,7 @@ void BFS_itertative(Vertexhead* v);
 int find_least_index(Vertexhead* v); //vertex 중 Edge가 존재하면서 vertexnumber가 가장 작은 vertex의 number 리턴
 int find_next_index(Vertexhead* head, Vertex* v); //DFS에서 다음에 탐색할 vertex를 찾는다
 
+void print_graph(Vertexhead* head);
 
 int main()
 {
@@ -85,6 +86,7 @@ int main()
 		case 'z': case 'Z':
 			InitializeGraph(headList);
 			break;
+
 		case 'v': case 'V':
 			/*currentvertex가 MAX_Vertex를 넘지 않아야 한다*/
 			if (currentvertex >= MAX_Vertex)
@@ -94,18 +96,24 @@ int main()
 			}
 			Insertvertex(headList);
 			break;
+
 		case 'd': case 'D':
 			Insertedge(headList);
 			break;
+
 		case 'r': case 'R':
 			DFS_iterative(headList);
 			break;
+
 		case 't': case 'T':
 			BFS_itertative(headList);
 			break;
 
-		case 'q': case 'Q':
+		case 'p': case 'P':
+			print_graph(headList);
+			break;
 
+		case 'q': case 'Q':
 			break;
 
 		default:
@@ -325,12 +333,12 @@ void Insertedge(Vertexhead* v)
 	}
 	else
 	{
-	 while (check->link != NULL)
-		check = check->link;
-	 check->link = (Edge*)malloc(sizeof(Edge));
-	 check->link->vertex = start;
-	 check->link->link = NULL;
-	}	
+		while (check->link != NULL)
+			check = check->link;
+		check->link = (Edge*)malloc(sizeof(Edge));
+		check->link->vertex = start;
+		check->link->link = NULL;
+	}
 	printf("vertex %d번에서 vertex %d번 까지 Edge를 생성했습니다.\n", start, destination);
 }
 
@@ -383,7 +391,7 @@ void DFS_iterative(Vertexhead* v)
 		pop();
 	}
 
-	
+	printf("%d %d\n", v[7].link->link->vertex, v[7].link->link->link->vertex);
 	printf("Vertex number : ");
 	for (int i = 0; i < currentstack; i++)
 		printf("%d ", DFS_Vertexnumber[i]);
@@ -395,7 +403,7 @@ void DFS_iterative(Vertexhead* v)
 
 	//visitflag 초기화
 	for (int i = 0; i < MAX_Vertex; i++)
-		if(v[i].link != NULL)
+		if (v[i].link != NULL)
 			v[i].link->visitflag = 0;
 }
 
@@ -458,7 +466,7 @@ void BFS_itertative(Vertexhead* v)
 			BFS_Vertexdata[currentqueue] = v[next_index].link->data; //출력을 위해 배열에 저장
 			v[next_index].link->visitflag = 1;
 			enQueue(next_index);
-			next_vertex = deQueue(); 
+			next_vertex = deQueue();
 			next_index = find_next_index(v, v[next_vertex].link);
 		}
 	}
@@ -525,7 +533,7 @@ void push(int aVertex)
 
 int deQueue()
 {
-	if (rear == front) //큐가 비어있다면 NULL 리턴
+	if (rear == front) //큐가 비어있다면 -1 리턴
 		return -1;
 	else
 		return queue[++front];
@@ -537,3 +545,34 @@ void enQueue(int aVertex)
 	currentqueue++;
 }
 
+void print_graph(Vertexhead* head)
+{
+	/*
+	출력 방식 :
+	vertex
+	Vertex		Edge
+	0(data)	->	1(data)	->	2(data)	...
+	1(data)	->	0(data)	-> ...
+		...
+	*/
+	Edge* next_edge = NULL;
+
+	printf("Vertex\t\tEdge\n");
+	for (int i = 0; i < MAX_Vertex; i++)
+	{
+		if (head[i].link) //i번째 vertex가 활성화 되있으면 출력
+		{
+			printf("%d(%d)", i, head[i].link->data);
+			if (head[i].link->link != NULL) //i번째 vertex의 Edge가 존재하면 출력
+			{
+				next_edge = head[i].link->link;
+				while (next_edge)
+				{
+					printf(" ->\t%d(%d)", next_edge->vertex, head[next_edge->vertex].link->data);
+					next_edge = next_edge->link;
+				}
+			}
+			printf("\n");
+		}
+	}
+}
