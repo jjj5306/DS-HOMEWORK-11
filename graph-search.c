@@ -91,7 +91,7 @@ int main()
 			/*currentvertex가 MAX_Vertex를 넘지 않아야 한다*/
 			if (currentvertex >= MAX_Vertex)
 			{
-				printf("Vertex 수가 최대입니다.\n");
+				printf("Vertex count is Max(10)\n");
 				break;
 			}
 			Insertvertex(headList);
@@ -209,13 +209,13 @@ void Insertvertex(Vertexhead* v)
 	{
 		if (v[vertexnumber].link != NULL) //vertexnumber의 vertex가 존재하는지 체크
 		{
-			printf("이미 존재하는 vertex 입니다.\n");
+			printf("Already existing vertex\n");
 			return;
 		}
 	}
 	else
 	{
-		printf("유효하지 않은 입력입니다.\n");
+		printf("Wrong input (0~9)\n");
 		return;
 	}
 	/*vertexhead의 vertexnumber의 link는 vertex를 가리킬 것이다 */
@@ -233,35 +233,35 @@ void Insertedge(Vertexhead* v)
 	int start, destination;
 	Edge* check = NULL;
 	Vertex* check2 = NULL; //check2는 vertex에 Edge가 없을 떄 사용
-	printf("Edge를 연결 할 출발 vertex number을 입력하세요.\n");
+	printf("Starting vertex number : ");
 	scanf("%d", &start);
 
 	/*0~9인지 확인*/
 	if (!(start >= 0 && start < 10))
 	{
-		printf("유효하지않은 vertex number입니다.\n");
+		printf("Wrong vertex number (0~9)\n");
 	}
 
 	/*생성된 vertex인지 확인*/
 	if (v[start].link == NULL)
 	{
-		printf("생성되지 않은 vertex입니다.\n");
+		printf("Not existing vertex \n");
 		return;
 	}
 
-	printf("도착할 vertex number을 입력하세요.\n");
+	printf("Destination vertex number : ");
 	scanf("%d", &destination);
 
 	/*0~9인지 확인*/
 	if (!(destination >= 0 && destination < 10))
 	{
-		printf("유효하지않은 vertex number입니다.\n");
+		printf("Wrong vertex number (0~9)\n");
 	}
 
 	/*생성된 vertex인지 확인*/
 	if (v[destination].link == NULL)
 	{
-		printf("생성되지 않은 vertex입니다.\n");
+		printf("Not existing vertex \n");
 		return;
 	}
 
@@ -272,7 +272,7 @@ void Insertedge(Vertexhead* v)
 	{
 		if (check->vertex == start) //destination까지의 Edge가 존재한다면 종료
 		{
-			printf("이미 존재하는 Edge입니다. \n");
+			printf("Already existing Edge \n");
 			return;
 		}
 		check = check->link;
@@ -285,14 +285,14 @@ void Insertedge(Vertexhead* v)
 		{
 			if (check->vertex == destination) //destination까지의 Edge가 존재한다면 종료
 			{
-				printf("이미 존재하는 Edge입니다. \n");
+				printf("Already existing Edge \n");
 				return;
 			}
 			check = check->link;
 		}
 		if (check->vertex == destination)
 		{
-			printf("이미 존재하는 Edge입니다. \n");
+			printf("Already existing Edge \n");
 			return;
 		}
 	}
@@ -312,7 +312,7 @@ void Insertedge(Vertexhead* v)
 		check2->link->vertex = start;
 		check2->link->link = NULL;
 
-		printf("vertex %d번에서 vertex %d번 까지 Edge를 생성했습니다.\n", start, destination);
+		printf("Starting vertex : %d ~ Destination vertex : %d\n", start, destination);
 		return;
 	}
 
@@ -339,7 +339,7 @@ void Insertedge(Vertexhead* v)
 		check->link->vertex = start;
 		check->link->link = NULL;
 	}
-	printf("vertex %d번에서 vertex %d번 까지 Edge를 생성했습니다.\n", start, destination);
+	printf("Starting vertex : %d ~ Destination vertex : %d\n", start, destination);
 }
 
 void DFS_iterative(Vertexhead* v)
@@ -367,7 +367,7 @@ void DFS_iterative(Vertexhead* v)
 	int DFS_Vertexdata[MAX_Vertex] = { 0, }; //DFS탐색 후 차례로 탐색 결과의 Vertex data가 저장 될 배열
 	if (next_index == -1)
 	{
-		printf("Egde가 존재하지 않는 그래프입니다.\n");
+		printf("Not existing Egde in graph\n");
 		return;
 	}
 	top = -1; //스택 사용을 위한 초기화
@@ -433,7 +433,7 @@ void BFS_itertative(Vertexhead* v)
 	int BFS_Vertexdata[MAX_Vertex] = { 0, }; //BFS탐색 후 차례로 탐색 결과의 Vertex data가 저장 될 배열
 	if (next_index == -1)
 	{
-		printf("Egde가 존재하지 않는 그래프입니다.\n");
+		printf("Not existing Egde in graph\n");
 		return;
 	}
 	front = -1; //큐 사용을 위한 초기화
